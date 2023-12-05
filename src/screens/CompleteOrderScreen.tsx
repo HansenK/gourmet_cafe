@@ -8,6 +8,7 @@ import ScreenLayout from "./ScreenLayout";
 import { CartProduct, useCart } from "../contexts/CartContext";
 import { supabase } from "../lib/supabase";
 import useMe from "../hooks/useMe";
+import { startCase } from "lodash";
 
 const CARD_OPTIONS = [
   { id: 1, cardNumber: "**** **** **** 3456", flag: "visa", type: "credit" },
@@ -70,7 +71,9 @@ const CompleteOrderScreen = () => {
             {CARD_OPTIONS.map((cardOption) => (
               <View key={cardOption.id} style={{ flexDirection: "row", alignItems: "center" }}>
                 <RadioButton value={String(cardOption.id)} />
-                <Text>{cardOption.cardNumber}</Text>
+                <Text>
+                  {cardOption.cardNumber} ({startCase(cardOption.type)}o)
+                </Text>
               </View>
             ))}
           </RadioButton.Group>

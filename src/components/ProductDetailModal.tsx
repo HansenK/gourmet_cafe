@@ -52,12 +52,13 @@ const ProductDetailModal = ({ product, visible, hideModal }: ProductDetailModalP
               <Text style={{ color: isProductInCart ? "gray" : "white" }}>Adicionar ao carrinho!</Text>
             </Button>
             <ScrollView>
-              <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 5 }}>
-                <Text style={{ fontWeight: "bold" }}>{"( Avaliação: "}</Text>
-                <Text style={{ fontWeight: "bold", marginLeft: 2 }}>{product.averageReview}/5</Text>
-                <Icon source="star" size={15} color="orange" />
-                <Text style={{ fontWeight: "bold" }}>{")"}</Text>
-              </View>
+              {!!product.averageReview && (
+                <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 5 }}>
+                  <Text style={{ fontWeight: "bold" }}>{"Avaliação: "}</Text>
+                  <Text style={{ fontWeight: "bold", marginRight: 2 }}>{product.averageReview}/5</Text>
+                  <Icon source="star" size={15} color="orange" />
+                </View>
+              )}
 
               <Text variant="bodyMedium">{product.description}</Text>
 
