@@ -3,9 +3,11 @@ import { IconButton, Menu, Text, Divider } from "react-native-paper";
 import { View } from "react-native";
 
 import useMe from "../hooks/useMe";
+import { useFidelityPoints } from "../queries/orders";
 
 const UserMenu = () => {
   const { data: me } = useMe();
+  const { data: fidelityPoints } = useFidelityPoints();
 
   const [openMenu, setOpenMenu] = React.useState(false);
 
@@ -18,7 +20,10 @@ const UserMenu = () => {
       contentStyle={{ backgroundColor: "white" }}
     >
       <View style={{ padding: 10 }}>
-        <Text style={{ fontWeight: "bold" }}>{me?.user_metadata.name}</Text>
+        <View style={{ flexDirection: "row", gap: 3 }}>
+          <Text style={{ fontWeight: "bold" }}>{me?.user_metadata.name}</Text>
+          {fidelityPoints && <Text style={{ color: "green", fontWeight: "bold" }}>({fidelityPoints} pontos)</Text>}
+        </View>
         <Text style={{ fontStyle: "italic" }}>{me?.email}</Text>
       </View>
 

@@ -28,3 +28,9 @@ export const useOrders = <TData = OrderWithProducts[]>(
     enabled: Boolean(me),
   });
 };
+
+export const useFidelityPoints = () => {
+  return useOrders({
+    select: (orders) => Number(orders.reduce((acc, order) => acc + order.total * 0.1, 0).toFixed(0)),
+  });
+};
