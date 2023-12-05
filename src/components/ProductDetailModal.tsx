@@ -19,6 +19,8 @@ const ProductDetailModal = ({ product, visible, hideModal }: ProductDetailModalP
 
   const shouldDisplayIngredients = product.ingredients && product.ingredients.length > 0;
 
+  if (!visible) return null;
+
   return (
     <Portal>
       <Modal visible={visible} onDismiss={hideModal} style={{ padding: 20 }}>

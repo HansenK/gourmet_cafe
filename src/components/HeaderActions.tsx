@@ -3,6 +3,7 @@ import { View } from "react-native";
 import { Badge, IconButton } from "react-native-paper";
 
 import { useCart } from "../contexts/CartContext";
+import UserMenu from "./UserMenu";
 
 const HeaderActions = () => {
   const navigation = useNavigation();
@@ -19,7 +20,7 @@ const HeaderActions = () => {
           </Badge>
         )}
       </View>
-      <IconButton icon="account-circle" size={28} onPress={() => {}} />
+      <UserMenu />
     </View>
   );
 };

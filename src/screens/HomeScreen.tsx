@@ -9,14 +9,14 @@ import CuriosityOfTheDay from "../components/home/CuriosityOfTheDay";
 const HomeScreen = () => {
   return (
     <ScreenLayout>
-      <View style={{ gap: 20 }}>
+      <View style={{ gap: 20, paddingBottom: 20 }}>
         <MorePopularProducts />
         <RecentProducts />
       </View>
 
-      <Divider style={{ marginTop: 20, marginBottom: 20 }} bold />
+      {/* <Divider style={{ marginTop: 20, marginBottom: 20 }} bold /> */}
 
-      <CuriosityOfTheDay />
+      {/* <CuriosityOfTheDay /> */}
     </ScreenLayout>
   );
 };

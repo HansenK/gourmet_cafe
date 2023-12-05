@@ -1,13 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
+import { DefaultError, UseQueryOptions, useQuery } from "@tanstack/react-query";
 
 import { supabase } from "../lib/supabase";
 import useMe from "../hooks/useMe";
 import { OrderWithProducts } from "../types/orders";
 
-export const useOrders = () => {
+export const useOrders = <TData = OrderWithProducts[]>(
+  options?: Partial<UseQueryOptions<OrderWithProducts[], DefaultError, TData, ["orders"]>>
+) => {
   const { data: me } = useMe();
 
-  return useQuery<OrderWithProducts[]>({
+  return useQuery<OrderWithProducts[], DefaultError, TData, ["orders"]>({
+    ...options,
     queryKey: ["orders"],
     queryFn: async () => {
       return supabase

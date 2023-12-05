@@ -112,6 +112,7 @@ export interface Database {
           number_of_people: number
           period: Database["public"]["Enums"]["reservation_period"]
           type: Database["public"]["Enums"]["reservation_type"]
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -120,6 +121,7 @@ export interface Database {
           number_of_people: number
           period: Database["public"]["Enums"]["reservation_period"]
           type: Database["public"]["Enums"]["reservation_type"]
+          user_id?: string
         }
         Update: {
           created_at?: string
@@ -128,8 +130,59 @@ export interface Database {
           number_of_people?: number
           period?: Database["public"]["Enums"]["reservation_period"]
           type?: Database["public"]["Enums"]["reservation_type"]
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "reservations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      reviews: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: number
+          product_id: number
+          stars: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: number
+          product_id: number
+          stars: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: number
+          product_id?: number
+          stars?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {

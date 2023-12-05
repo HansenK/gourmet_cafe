@@ -2,15 +2,13 @@ import React from "react";
 import { TextInput, RadioButton, Text, Button, ActivityIndicator } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { View } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { format } from "date-fns";
 
 import ScreenLayout from "./ScreenLayout";
-import { Reservation, ReservationPeriod, ReservationType } from "../types/reservations";
-import { useMutation } from "@tanstack/react-query";
+import { ReservationPeriod, ReservationType } from "../types/reservations";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../lib/supabase";
-
-interface ReservationScreenProps {
-  reservation?: Reservation;
-}
 
 const RESERVATION_TYPE_OPTIONS: { id: number; label: string; value: ReservationType }[] = [
   { id: 1, label: "Evento", value: "event" },
@@ -24,10 +22,13 @@ const RESERVATION_PERIOD_OPTIONS: { id: number; label: string; value: Reservatio
 
 const ReservationScreen = () => {
   const navigation = useNavigation();
+  const queryClient = useQueryClient();
 
   const [numberOfPeople, setNumberOfPeople] = React.useState<number | null>(null);
   const [selectedReservationTypeId, setSelectedReservationTypeId] = React.useState<number | null>(1);
   const [selectedReservationPeriodId, setSelectedReservationPeriodId] = React.useState<number | null>(1);
+  const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
+  const [showDatePicker, setShowDatePicker] = React.useState(false);
 
   const { mutate: createReservation, isPending: isSubmitting } = useMutation({
     mutationFn: async () => {
@@ -38,14 +39,34 @@ const ReservationScreen = () => {
         number_of_people: numberOfPeople || 0,
         period,
         type,
-        date: new Date().toString(),
+        date: selectedDate!.toLocaleString(),
       });
+    },
+    onSuccess: () => {
+      navigation.navigate("Reservations");
+      queryClient.invalidateQueries({ queryKey: ["reservations"] });
     },
   });
 
   return (
     <ScreenLayout>
       <View style={{ gap: 10 }}>
+        <Button icon="calendar" onPress={() => setShowDatePicker(true)} mode="outlined" buttonColor="white">
+          <Text>{selectedDate ? format(selectedDate, "dd/MM/yyyy") : "Escolher Data"}</Text>
+        </Button>
+
+        {showDatePicker && (
+          <DateTimePicker
+            value={selectedDate || new Date()}
+            is24Hour
+            mode="date"
+            onChange={(_, date) => {
+              setSelectedDate(date || null);
+              setShowDatePicker(false);
+            }}
+          />
+        )}
+
         <TextInput
           label="Quantidade de pessoas"
           mode="outlined"
@@ -91,14 +112,15 @@ const ReservationScreen = () => {
           </RadioButton.Group>
         </View>
 
-        <Button disabled={isSubmitting} mode="contained" icon="calendar-plus" onPress={() => createReservation()}>
-          {isSubmitting ? (
-            <View>
-              <ActivityIndicator />
-            </View>
-          ) : (
-            <Text style={{ color: "white" }}>Reservar</Text>
-          )}
+        <Button
+          disabled={isSubmitting || !selectedDate}
+          mode="contained"
+          icon="calendar-plus"
+          onPress={() => createReservation()}
+        >
+          <Text style={{ color: selectedDate && !isSubmitting ? "white" : "black" }}>
+            {isSubmitting ? "Carregando..." : "Reservar"}
+          </Text>
         </Button>
       </View>
     </ScreenLayout>

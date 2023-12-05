@@ -1,12 +1,11 @@
 import React from "react";
 import { View, ScrollView } from "react-native";
 import { Text, Chip, ActivityIndicator, Icon } from "react-native-paper";
-import { useQuery } from "@tanstack/react-query";
 
 import ScreenLayout from "./ScreenLayout";
 import ProductItem from "../components/products/ProductItem";
-import { supabase } from "../lib/supabase";
 import { Product, ProductType } from "../types/products";
+import { useProducts } from "../queries/products";
 
 const DEFAULT_PRODUCTS: Product[] = [];
 const FILTERS = [
@@ -15,23 +14,14 @@ const FILTERS = [
 ];
 
 const ProductsScreen = () => {
-  const [selectedFilter, setSelectedFilter] = React.useState<ProductType | null>(null);
+  const [selectedFilter, setSelectedFilter] = React.useState<ProductType>();
 
   const {
     data: products = DEFAULT_PRODUCTS,
     isLoading,
     isFetched,
-  } = useQuery({
-    queryKey: ["products", selectedFilter],
-    queryFn: async () => {
-      let query = supabase.from("products").select();
-
-      if (selectedFilter) {
-        query = query.eq("type", selectedFilter);
-      }
-
-      return query.then((res) => res.data || DEFAULT_PRODUCTS);
-    },
+  } = useProducts({
+    type: selectedFilter,
   });
 
   return (
@@ -54,7 +44,7 @@ const ProductsScreen = () => {
                     key={filter.value}
                     selected={isSelected}
                     icon={filter.icon}
-                    onPress={() => setSelectedFilter(selectedFilter === filter.value ? null : filter.value)}
+                    onPress={() => setSelectedFilter(selectedFilter === filter.value ? undefined : filter.value)}
                     style={{ backgroundColor: isSelected ? "#C7B5A3" : undefined }}
                     mode={isSelected ? "flat" : "outlined"}
                   >

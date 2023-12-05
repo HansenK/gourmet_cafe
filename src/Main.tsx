@@ -1,18 +1,21 @@
 import React from "react";
+import { Image } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useQueryClient } from "@tanstack/react-query";
 
 import HomeScreen from "./screens/HomeScreen";
 import ProductsScreen from "./screens/ProductsScreen";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CartScreen from "./screens/CartScreen";
 import HeaderActions from "./components/HeaderActions";
 import HistoryScreen from "./screens/HistoryScreen";
 import ReservationsScreen from "./screens/ReservationsScreen";
 import ReservationScreen from "./screens/ReservationScreen";
 import CompleteOrderScreen from "./screens/CompleteOrderScreen";
-import { Image } from "react-native";
 import { coffeeLogo } from "./images";
+import useMe from "./hooks/useMe";
+import { supabase } from "./lib/supabase";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -23,9 +26,10 @@ const MainScreenTabNavigator = () => (
       tabBarStyle: { paddingBottom: 5 },
       headerLeft: () => <Image source={coffeeLogo} style={{ width: 30, height: 30 }} />,
       headerRight: () => <HeaderActions />,
-      headerLeftContainerStyle: { paddingLeft: 10 },
+      headerLeftContainerStyle: { paddingLeft: 15 },
       headerRightContainerStyle: { paddingRight: 10 },
       tabBarActiveTintColor: "#663300",
+      headerStyle: { backgroundColor: "#DCD0C5" },
     }}
   >
     <Tab.Screen
@@ -68,8 +72,34 @@ const MainScreenTabNavigator = () => (
 );
 
 const Main = () => {
+  const { data: me } = useMe();
+  const queryClient = useQueryClient();
+
+  const signInGuestUser = () => {
+    supabase.auth
+      .signInWithPassword({
+        email: "guest@gourmetcafe.com",
+        password: "Test123.AAA",
+      })
+      .then(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["me"],
+        });
+      });
+  };
+
+  React.useEffect(() => {
+    if (Boolean(me)) return;
+
+    signInGuestUser();
+  }, [me]);
+
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: "#DCD0C5" },
+      }}
+    >
       <Stack.Screen name="App" options={{ headerShown: false }} component={MainScreenTabNavigator} />
       <Stack.Screen name="Cart" options={{ headerTitle: "Carrinho" }} component={CartScreen} />
       <Stack.Screen name="ReservationScreen" options={{ headerTitle: "Nova Reserva" }} component={ReservationScreen} />

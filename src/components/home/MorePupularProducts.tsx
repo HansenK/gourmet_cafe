@@ -1,25 +1,20 @@
-import { Link } from "@react-navigation/native";
 import { ScrollView, View } from "react-native";
-import { Text } from "react-native-paper";
+import { Text, ActivityIndicator } from "react-native-paper";
 
-import { Product } from "../../types/products";
 import ProductCard from "../ProductCard";
-import { MOCKED_PRODUCTS } from "../../utils/products";
+import { useProducts } from "../../queries/products";
 
 const MorePopularProducts = () => {
-  // TBD: Fetch popular products from API
-  const popularProducts: Product[] = MOCKED_PRODUCTS;
+  const { data: popularProducts = [], isLoading } = useProducts();
 
   return (
     <View style={{ gap: 10 }}>
-      <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+      <View style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 15 }}>
         <Text variant="headlineSmall" style={{ fontWeight: "bold" }}>
           Mais populares
         </Text>
 
-        <Link to="/products" style={{ textDecorationLine: "underline" }}>
-          Ver todos...
-        </Link>
+        {isLoading && <ActivityIndicator size={15} />}
       </View>
 
       <ScrollView horizontal>
