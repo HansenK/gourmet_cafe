@@ -3,8 +3,8 @@ import { Card, Modal, Portal, Text, Divider, List, IconButton, Button, Icon } fr
 import { ScrollView, View } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { Product } from "../types/products";
 import { useCart } from "../contexts/CartContext";
+import { Product } from "../types/products";
 
 interface ProductDetailModalProps {
   product: Product;
@@ -31,7 +31,6 @@ const ProductDetailModal = ({ product, visible, hideModal }: ProductDetailModalP
           />
 
           <Card.Title
-            titleVariant="titleMedium"
             title={product.name}
             titleStyle={{ fontWeight: "bold" }}
             subtitle={`R$ ${product.price.toFixed(2)}`.replace(".", ",")}
@@ -53,6 +52,13 @@ const ProductDetailModal = ({ product, visible, hideModal }: ProductDetailModalP
               <Text style={{ color: isProductInCart ? "gray" : "white" }}>Adicionar ao carrinho!</Text>
             </Button>
             <ScrollView>
+              <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 5 }}>
+                <Text style={{ fontWeight: "bold" }}>{"( Avaliação: "}</Text>
+                <Text style={{ fontWeight: "bold", marginLeft: 2 }}>{product.averageReview}/5</Text>
+                <Icon source="star" size={15} color="orange" />
+                <Text style={{ fontWeight: "bold" }}>{")"}</Text>
+              </View>
+
               <Text variant="bodyMedium">{product.description}</Text>
 
               <Divider bold style={{ marginVertical: 20 }} />

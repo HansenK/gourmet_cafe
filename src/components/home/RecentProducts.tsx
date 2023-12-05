@@ -1,20 +1,20 @@
 import { ScrollView, View } from "react-native";
 import { Text, ActivityIndicator } from "react-native-paper";
-import { uniqBy } from "lodash";
 
 import ProductCard from "../ProductCard";
 import { useOrders } from "../../queries/orders";
-import { Product } from "../../types/products";
+import { useProducts } from "../../queries/products";
 
 const RecentProducts = () => {
-  const { data: recentProducts = [], isLoading } = useOrders<Product[]>({
-    select: (orders) => {
-      const allProducts: Product[] = orders
-        .map((order) => order.products)
-        .flat()
-        .map((cartProduct) => cartProduct.product!);
-
-      return uniqBy<Product>(allProducts, "id");
+  const { data: orders = [], isLoading } = useOrders();
+  const { data: recentProducts = [] } = useProducts({
+    options: {
+      select: (products) => {
+        return products.filter((product) => {
+          return orders.some((order) => order.products.some((orderProduct) => orderProduct.product?.id === product.id));
+        });
+      },
+      enabled: orders.length > 0,
     },
   });
 
@@ -31,6 +31,7 @@ const RecentProducts = () => {
       <ScrollView horizontal>
         <View style={{ gap: 10, display: "flex", flexDirection: "row" }}>
           {recentProducts.map((product) => (
+            // TBD: Fix type
             <ProductCard key={product.id} product={product} />
           ))}
         </View>

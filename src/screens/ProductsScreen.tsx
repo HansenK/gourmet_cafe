@@ -4,7 +4,7 @@ import { Text, Chip, ActivityIndicator, Icon } from "react-native-paper";
 
 import ScreenLayout from "./ScreenLayout";
 import ProductItem from "../components/products/ProductItem";
-import { Product, ProductType } from "../types/products";
+import { ProductType, Product } from "../types/products";
 import { useProducts } from "../queries/products";
 
 const DEFAULT_PRODUCTS: Product[] = [];
