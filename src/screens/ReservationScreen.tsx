@@ -48,6 +48,8 @@ const ReservationScreen = () => {
     },
   });
 
+  const shouldDisableSaveButton = !selectedDate || !numberOfPeople || isSubmitting;
+
   return (
     <ScreenLayout>
       <View style={{ gap: 10 }}>
@@ -113,7 +115,7 @@ const ReservationScreen = () => {
         </View>
 
         <Button
-          disabled={isSubmitting || !selectedDate}
+          disabled={shouldDisableSaveButton}
           mode="contained"
           icon="calendar-plus"
           onPress={() => createReservation()}
