@@ -111,6 +111,7 @@ export interface Database {
           id: number
           number_of_people: number
           period: Database["public"]["Enums"]["reservation_period"]
+          table: number
           type: Database["public"]["Enums"]["reservation_type"]
           user_id: string
         }
@@ -120,6 +121,7 @@ export interface Database {
           id?: number
           number_of_people: number
           period: Database["public"]["Enums"]["reservation_period"]
+          table?: number
           type: Database["public"]["Enums"]["reservation_type"]
           user_id?: string
         }
@@ -129,6 +131,7 @@ export interface Database {
           id?: number
           number_of_people?: number
           period?: Database["public"]["Enums"]["reservation_period"]
+          table?: number
           type?: Database["public"]["Enums"]["reservation_type"]
           user_id?: string
         }
