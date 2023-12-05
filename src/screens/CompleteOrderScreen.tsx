@@ -36,7 +36,7 @@ const CompleteOrderScreen = () => {
 
       const newOrderId = await supabase
         .from("orders")
-        .insert({ user_id: me?.id!, total: totalPrice })
+        .insert({ user_id: me?.id!, total: totalPrice, status: "in_progress" })
         .select("id")
         .single()
         .then((res) => res.data?.id);

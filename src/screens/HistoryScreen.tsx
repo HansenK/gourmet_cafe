@@ -1,12 +1,17 @@
+import React from "react";
 import { View } from "react-native";
 import { ActivityIndicator, Icon, Text } from "react-native-paper";
 
 import OrderItem from "../components/history/OrderItem";
 import { useOrders } from "../queries/orders";
 import ScreenLayout from "./ScreenLayout";
+import { OrderStatus } from "../types/orders";
 
 const HistoryScreen = () => {
   const { data: orders = [], isLoading, refetch } = useOrders();
+
+  const pastOrders = React.useMemo(() => orders.filter((order) => order.status === OrderStatus.Closed), [orders]);
+  const currentOrder = React.useMemo(() => orders.find((order) => order.status === OrderStatus.InProgress), [orders]);
 
   return (
     <ScreenLayout
@@ -24,11 +29,28 @@ const HistoryScreen = () => {
         </View>
       )}
 
-      <View style={{ gap: 10, paddingBottom: 20 }}>
-        {orders.map((order) => {
-          return <OrderItem key={order.id} order={order} />;
-        })}
-      </View>
+      {!!currentOrder && (
+        <View style={{ gap: 10, marginBottom: 10 }}>
+          <Text variant="titleLarge" style={{ fontWeight: "bold" }}>
+            Pedido em andamento:
+          </Text>
+          <OrderItem key={currentOrder.id} order={currentOrder} />
+        </View>
+      )}
+
+      {pastOrders.length > 0 && (
+        <View style={{ gap: 10 }}>
+          <Text variant="titleLarge" style={{ fontWeight: "bold" }}>
+            Pedidos passados:
+          </Text>
+
+          <View style={{ gap: 10, paddingBottom: 20 }}>
+            {pastOrders.map((order) => {
+              return <OrderItem key={order.id} order={order} />;
+            })}
+          </View>
+        </View>
+      )}
     </ScreenLayout>
   );
 };

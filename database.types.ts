@@ -13,18 +13,21 @@ export interface Database {
         Row: {
           created_at: string
           id: number
+          status: Database["public"]["Enums"]["order_status"]
           total: number
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: number
+          status?: Database["public"]["Enums"]["order_status"]
           total?: number
           user_id: string
         }
         Update: {
           created_at?: string
           id?: number
+          status?: Database["public"]["Enums"]["order_status"]
           total?: number
           user_id?: string
         }
@@ -195,6 +198,7 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
+      order_status: "in_progress" | "closed"
       reservation_period: "morning" | "evening"
       reservation_type: "remote_office" | "event"
     }

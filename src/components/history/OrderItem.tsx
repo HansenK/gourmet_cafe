@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { Text, List } from "react-native-paper";
 
-import { OrderWithProducts } from "../../types/orders";
+import { OrderStatus, OrderWithProducts } from "../../types/orders";
 import { format } from "date-fns";
 
 interface OrderItemProps {
@@ -11,10 +11,12 @@ interface OrderItemProps {
 const OrderItem = ({ order }: OrderItemProps) => {
   return (
     <View style={{ backgroundColor: "white", padding: 10, borderColor: "gray", borderWidth: 1, borderRadius: 10 }}>
-      <View style={{ flexDirection: "row" }}>
-        <Text style={{ fontWeight: "bold" }}>Data: </Text>
-        <Text variant="titleSmall">{format(new Date(order.created_at), "dd/MM/yyyy - HH:mm:ss")}</Text>
-      </View>
+      {order.status !== OrderStatus.InProgress && (
+        <View style={{ flexDirection: "row" }}>
+          <Text style={{ fontWeight: "bold" }}>Data: </Text>
+          <Text variant="titleSmall">{format(new Date(order.created_at), "dd/MM/yyyy - HH:mm:ss")}</Text>
+        </View>
+      )}
       <View style={{ flexDirection: "row" }}>
         <Text style={{ fontWeight: "bold" }}>Total: </Text>
         <Text variant="titleSmall" style={{ color: "darkred" }}>
