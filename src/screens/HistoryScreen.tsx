@@ -6,10 +6,15 @@ import { useOrders } from "../queries/orders";
 import ScreenLayout from "./ScreenLayout";
 
 const HistoryScreen = () => {
-  const { data: orders = [], isLoading } = useOrders();
+  const { data: orders = [], isLoading, refetch } = useOrders();
 
   return (
-    <ScreenLayout>
+    <ScreenLayout
+      refreshing={isLoading}
+      onRefresh={() => {
+        refetch();
+      }}
+    >
       {isLoading && <ActivityIndicator style={{ marginVertical: 20 }} />}
 
       {orders.length === 0 && !isLoading && (
@@ -19,7 +24,7 @@ const HistoryScreen = () => {
         </View>
       )}
 
-      <View style={{ gap: 10 }}>
+      <View style={{ gap: 10, paddingBottom: 20 }}>
         {orders.map((order) => {
           return <OrderItem key={order.id} order={order} />;
         })}

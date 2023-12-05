@@ -49,7 +49,10 @@ const CompleteOrderScreen = () => {
         quantity: cartProduct.quantity,
       }));
 
-      supabase.from("orders_products").insert(newOrderProducts);
+      return supabase
+        .from("orders_products")
+        .insert(newOrderProducts)
+        .then((res) => res.data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
@@ -92,14 +95,14 @@ const CompleteOrderScreen = () => {
           onChange={(e) => setDiscountCode(e.nativeEvent.text)}
         />
 
-        <Button disabled={isSubmitting} mode="contained" onPress={() => createOrder(cart)}>
-          {isSubmitting ? (
-            <View>
-              <ActivityIndicator color="black" />
-            </View>
-          ) : (
-            <Text style={{ color: "white" }}>Finalizar pedido</Text>
-          )}
+        <Button
+          disabled={isSubmitting}
+          mode="contained"
+          onPress={() => createOrder(cart)}
+          icon="check"
+          textColor={isSubmitting ? "gray" : "white"}
+        >
+          <Text style={{ color: isSubmitting ? "gray" : "white" }}>{isSubmitting ? "Carregando..." : "Finalizar pedido"}</Text>
         </Button>
       </View>
     </ScreenLayout>

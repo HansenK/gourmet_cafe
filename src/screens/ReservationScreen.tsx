@@ -117,8 +117,9 @@ const ReservationScreen = () => {
           mode="contained"
           icon="calendar-plus"
           onPress={() => createReservation()}
+          textColor={selectedDate && !isSubmitting ? "white" : "gray"}
         >
-          <Text style={{ color: selectedDate && !isSubmitting ? "white" : "black" }}>
+          <Text style={{ color: selectedDate && !isSubmitting ? "white" : "gray" }}>
             {isSubmitting ? "Carregando..." : "Reservar"}
           </Text>
         </Button>

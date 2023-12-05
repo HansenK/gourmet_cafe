@@ -47,9 +47,10 @@ const ProductDetailModal = ({ product, visible, hideModal }: ProductDetailModalP
                 addToCart(product);
               }}
               disabled={isProductInCart}
+              icon="cart-plus"
+              textColor={isProductInCart ? "gray" : "white"}
             >
-              <Icon source="cart-plus" size={20} color="white" />
-              <Text style={{ color: "white" }}>Adicionar ao carrinho!</Text>
+              <Text style={{ color: isProductInCart ? "gray" : "white" }}>Adicionar ao carrinho!</Text>
             </Button>
             <ScrollView>
               <Text variant="bodyMedium">{product.description}</Text>
